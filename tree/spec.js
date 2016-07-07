@@ -87,7 +87,11 @@ tape('b should create a tree of nodes', t => {
 })
 
 tape('b should append a content string into the attribute list', t => {
-  t.equal(b('el', 'content').attr.content, 'content', 'content gets appended')
+  t.equal(
+    b('el', 'content').attr.content,
+    'content',
+    'content gets appended'
+  )
   t.end()
 })
 
@@ -100,7 +104,11 @@ tape('walk will depth-first walk the tree', t => {
     b('4', [
       b('5')
     ])])
-  t.equal(traversalOrder(walk, tree), 'R12345', 'walk is pre-order')
+  t.equal(
+    traversalOrder(walk, tree),
+    'R12345',
+    'walk is pre-order'
+  )
   t.end()
 })
 
@@ -113,6 +121,27 @@ tape('walk2 will depth-first walk the tree and remember parent nodes', t => {
     b('4', [
       b('5')
     ])])
-  t.equal(relationMap(walk2, tree, {type: '$'}), '{$>R}{R>1}{1>2.}{1>3.}{R>4}{4>5.}', 'walk2 is pre-order')
+  t.equal(
+    relationMap(walk2, tree, {type: '$'}),
+    '{$>R}{R>1}{1>2.}{1>3.}{R>4}{4>5.}',
+    'walk2 is pre-order'
+  )
+  t.end()
+})
+
+tape('b should append children to their parents during creation', t => {
+  // Simple example
+  let linear = b('r', [b('1')])
+  t.equal(linear.children[0].type, '1', 'r > 1 is ok')
+  t.equal(linear.children[0].parent.type, 'R', '1 < r is ok')
+
+  // same as b('r', [b('1', [b('2')])])
+  let grandchild = b('2')
+  let child = b('1', [grandchild])
+  let root = b('r', [child])
+  t.equal(root.children[0].type, child.type, 'r > 1 is ok')
+  t.equal(child.parent.type, root.type, '1 < r is ok')
+  t.equal(child.children[0].type, grandchild.type, '1 > 2 is ok')
+  t.equal(grandchild.parent.type, child.type, '2 < 1 is ok')
   t.end()
 })

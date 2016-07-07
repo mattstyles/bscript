@@ -36,6 +36,9 @@ function createNode (args) {
     // Children
     if (isArray(p)) {
       node.children = p
+      p.forEach(child => {
+        child.parent = node
+      })
       return
     }
 
