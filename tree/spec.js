@@ -20,6 +20,11 @@ function traversalOrder (fn, node) {
   return str
 }
 
+/**
+ * Creates a relation maps
+ * '>' denotes immediate descendant
+ * '.' denotes leaf node
+ */
 function relationMap (fn, node, subroot) {
   let str = ''
   fn((child, parent) => {

@@ -24,11 +24,11 @@ const b = require('bscript-tree')
 ## Usage
 
 ```js
-const tree = b('element', {}, [
+const tree = b('element', [
   b('box', {
     top: 0,
     left: 0,
-    width: 100%,
+    width: '100%',
     height: 1,
     content: 'Hello'
   })

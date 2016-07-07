@@ -7,6 +7,7 @@ const {isArray} = require('util')
 class Node {
   constructor () {
     this.type = null
+    this.element = null
     this.attr = {}
     this.children = []
     this.parent = null
