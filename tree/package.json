@@ -1,0 +1,25 @@
+{
+  "name": "bscript-tree",
+  "version": "0.0.0",
+  "description": "Creates a tree of blessed elements",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattstyles/bscript.git"
+  },
+  "keywords": [
+    "blessed",
+    "tree",
+    "bscript",
+    "hyperscript"
+  ],
+  "author": "Matt Styles <matt@veryfizzyjelly.com> (http://github.com/mattstyles)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattstyles/bscript/issues"
+  },
+  "homepage": "https://github.com/mattstyles/bscript#readme"
+}
