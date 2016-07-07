@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/mattstyles/bscript#readme",
   "devDependencies": {
-    "blessed": "^0.1.81",
     "standard": "^7.1.2",
     "tape": "^4.6.0"
   }
