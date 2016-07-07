@@ -17,24 +17,14 @@ function createElement (type, attr) {
  * Mutates the node by appending id and an actual element
  */
 function create (node) {
-  const {type, parent, attr, children} = node
-
-  if (typeof type === 'function') {
-    let component = type(Object.assign(attr, {
-      children
-    }))
-    node.element = createElement(component.type, component.attr)
-  } else {
-    node.element = createElement(type, attr)
-  }
+  const {type, parent, attr} = node
+  node.element = createElement(type, attr)
 
   if (!parent || !parent.element) {
     return
   }
 
   parent.element.append(node.element)
-
-  // Attach unique id
 }
 
 /**
@@ -44,10 +34,14 @@ function create (node) {
  * For now just create a new tree of elements
  */
 module.exports = function render (root, screen) {
-  root._id = '$1'
-  walk(create, root)
+  let count = 0
+  walk(node => {
+    let id = node.parent ? node.parent._id + '$' : '$'
+    id += count++ + '.'
+    node._id = id
+    create(node)
+  }, root)
   screen.append(root.element)
   screen.render()
-  console.log(root)
   return root
 }

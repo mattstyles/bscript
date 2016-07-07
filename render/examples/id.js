@@ -1,6 +1,7 @@
 
 const render = require('../')
 const b = require('../../tree')
+const {walk} = require('../../tree/util')
 const screen = require('./screen')
 
 let App = props => {
@@ -21,15 +22,19 @@ let App = props => {
     b('text', {
       top: 0,
       left: 20,
-      content: 'Sailor'
+      content: 'Daev'
     })
-  ].concat(props.children))
+  ].concat())
 }
 
-render(b(App, {
+let tree = render(b(App, {
   content: 'Hello'
 }, [
   b('text', {
     top: 2
   }, 'World')
 ]), screen)
+
+walk(node => {
+  console.log(node._id)
+}, tree)

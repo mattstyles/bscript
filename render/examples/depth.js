@@ -10,7 +10,7 @@ function renderChildren (items) {
       text: item,
       x: count
     })
-    count += item.length + 3
+    count += item.length + 1
     return node
   })
 }
@@ -40,10 +40,12 @@ const App = props => {
 
 render(App({
   items: [
-    'Hello',
-    'from',
-    'the',
-    'other',
-    'side'
+    'Hello,',
+    'is',
+    'it',
+    'me',
+    'you’re',
+    'looking',
+    'for?'
   ]
 }), screen)
