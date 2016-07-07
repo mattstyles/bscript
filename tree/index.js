@@ -73,6 +73,14 @@ function createNode (args) {
  */
 module.exports = function b () {
   let node = createNode(Array.from(arguments))
+
+  // If its a component then unpack it
+  if (typeof node.type === 'function') {
+    node = node.type(Object.assign({}, node.attr, {
+      children: node.children
+    }))
+  }
+
   // Attach parent nodes
   node.children.forEach(child => {
     child.parent = node

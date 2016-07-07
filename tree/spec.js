@@ -68,13 +68,21 @@ const Component = props => {
   return b('box', props)
 }
 
+const ChildComponent = props => {
+  return b('box', props, props.children)
+}
+
+const ComplexComponent = props => {
+  return b('c1', [b('c2')].concat(props.children))
+}
+
 tape('b should create a single node', t => {
   t.ok(b('element').type === 'Element', 'b should capitalize types')
   t.end()
 })
 
 tape('Check type parameter type', t => {
-  t.ok(typeof b(Component).type === 'function', 'b should accept a function as type')
+  t.ok(typeof b(Component).type === 'string', 'b should accept a function as type')
   t.ok(typeof b('element').type === 'string', 'b should accept a string as type')
   t.end()
 })
@@ -198,5 +206,26 @@ tape('b should append children to their parents during creation', t => {
     'relations are correct'
   )
 
+  t.end()
+})
+
+tape('b should accept component functions', t => {
+  let root = b(Component)
+  t.equal(root.type, 'Box', 'Component functions should be invoked')
+  let complexRoot = b(Component, [b('1')])
+  t.equal(complexRoot.type, 'Box', 'Components passed with children invoke')
+  t.equal(complexRoot.children.length, 0, 'Components can ignore children')
+  let complexComp = b(ChildComponent)
+  t.equal(complexComp.type, 'Box', 'Components with children invoke')
+  t.equal(complexComp.children.length, 0, 'Components can be passed no children')
+  let passedChildren = b(ChildComponent, [b('r1')])
+  t.equal(passedChildren.type, 'Box', 'Components passed children invoke')
+  t.equal(passedChildren.children.length, 1, 'Components honour passed children')
+  let compChildren = b(ComplexComponent)
+  t.equal(compChildren.type, 'C1', 'Components with children invoke')
+  t.equal(compChildren.children.length, 1, 'Components can have their own children')
+  let compChildrenPass = b(ComplexComponent, [b('r1')])
+  t.equal(compChildrenPass.type, 'C1', 'Components with children and passed children invoke')
+  t.equal(compChildrenPass.children.length, 2, 'Components can have their own children and be passed children')
   t.end()
 })
