@@ -5,36 +5,60 @@ const {walk} = require('../../tree/util')
 const screen = require('./screen')
 
 let App = props => {
-  return b('box', {
+  return b('text', {
     top: 0,
-    left: 0,
-    width: '100%',
-    height: 3,
-    border: {
-      type: 'line'
-    },
-    style: {
-      border: {
-        fg: 'white'
-      }
-    }
-  }, props.content, [
+    left: '50%',
+    content: 'F'
+  }, [
     b('text', {
-      top: 0,
-      left: 20,
-      content: 'Daev'
-    })
-  ].concat())
+      top: 2,
+      left: -12,
+      content: 'B'
+    }, [
+      b('text', {
+        top: 2,
+        left: -6,
+        content: 'A'
+      }),
+      b('text', {
+        top: 2,
+        left: 6,
+        content: 'D'
+      }, [
+        b('text', {
+          top: 2,
+          left: -6,
+          content: 'C'
+        }),
+        b('text', {
+          top: 2,
+          left: 6,
+          content: 'E'
+        })
+      ])
+    ]),
+    b('text', {
+      top: 2,
+      left: 12,
+      content: 'G'
+    }, [
+      b('text', {
+        top: 2,
+        left: 6,
+        content: 'I'
+      }, [
+        b('text', {
+          top: 2,
+          left: -6,
+          content: 'H'
+        })
+      ])
+    ])
+  ])
 }
 
-let tree = render(b(App, {
-  content: 'Hello'
-}, [
-  b('text', {
-    top: 2
-  }, 'World')
-]), screen)
+let tree = render(b(App), screen)
 
 walk(node => {
-  console.log(node._id)
+  console.log(node.attr.content, ':', node._id)
 }, tree)
