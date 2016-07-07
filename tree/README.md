@@ -3,7 +3,6 @@
 
 > Creates a tree of blessed elements
 
-[![Build Status](https://travis-ci.org/mattstyles/bscript-tree.svg?branch=composer)](https://travis-ci.org/mattstyles/bscript-tree)
 [![npm version](https://badge.fury.io/js/bscript-tree.svg)](https://badge.fury.io/js/bscript-tree)
 [![Dependency Status](https://david-dm.org/mattstyles/bscript-tree.svg)](https://david-dm.org/mattstyles/bscript-tree)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)

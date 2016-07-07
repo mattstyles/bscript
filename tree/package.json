@@ -4,7 +4,7 @@
   "description": "Creates a tree of blessed elements",
   "main": "index.js",
   "scripts": {
-    "test": "standard && tape spec.js"
+    "test": "standard *.js && tape spec.js"
   },
   "repository": {
     "type": "git",

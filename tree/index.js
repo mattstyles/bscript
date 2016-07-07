@@ -68,6 +68,7 @@ function createNode (args) {
  */
 module.exports = function b () {
   let node = createNode(Array.from(arguments))
+  // Attach parent nodes
   node.children.forEach(child => {
     child.parent = node
   })

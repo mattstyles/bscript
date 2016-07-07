@@ -1,20 +1,11 @@
 
 const tape = require('tape')
 const b = require('./')
+const {walk, walk2} = require('./util')
 
-function walk (node, fn) {
-  fn(node)
-  if (node.children && node.children.length) {
-    node.children.forEach(child => walk(child, fn))
-  }
-}
-
-function count (tree) {
+function count (node) {
   let count = 0
-  function add (node) {
-    count++
-  }
-  walk(tree, add)
+  walk(() => count++, node)
   return count
 }
 
@@ -60,10 +51,59 @@ tape('b should create a tree of nodes', t => {
     b('element')
   ])
   t.equal(count(tree), 2, 'b should recursively create the tree')
+
+  let deepTree = b('1', [
+    b('2', [
+      b('3')
+    ])
+  ])
+  t.equal(count(deepTree), 3, 'b can create deep trees')
+
   t.end()
 })
 
 tape('b should append a content string into the attribute list', t => {
   t.equal(b('el', 'content').attr.content, 'content', 'content gets appended')
+  t.end()
+})
+
+tape('walk will depth-first walk the tree', t => {
+  let str = ''
+  let tree = b('r', [
+    b('1', [
+      b('2'),
+      b('3')
+    ]),
+    b('4', [
+      b('5')
+    ])])
+  function relations (node) {
+    str += node.type + (node.children.length ? '>' : '')
+  }
+  walk(relations, tree)
+  t.equal(str, 'R>1>234>5', 'walk is pre-order')
+  t.end()
+})
+
+tape('walk2 will depth-first walk the tree and remember parent nodes', t => {
+  let str = ''
+  let tree = b('r', [
+    b('1', [
+      b('2'),
+      b('3')
+    ]),
+    b('4', [
+      b('5')
+    ])])
+  function relations (node, parent) {
+    str += '{' +
+      parent.type +
+      '>' +
+      node.type +
+      (node.children.length ? '' : '.') +
+      '}'
+  }
+  walk2(relations, tree, {type: '$'})
+  t.equal(str, '{$>R}{R>1}{1>2.}{1>3.}{R>4}{4>5.}', 'walk2 is pre-order')
   t.end()
 })
