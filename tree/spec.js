@@ -2,30 +2,68 @@
 const tape = require('tape')
 const b = require('./')
 
+function walk (node, fn) {
+  fn(node)
+  if (node.children && node.children.length) {
+    node.children.forEach(child => walk(child, fn))
+  }
+}
+
 function count (tree) {
   let count = 0
-
-  function walk (node) {
+  function add (node) {
     count++
-    if (node.children && node.children.length) {
-      node.children.forEach(walk)
-    }
   }
-
-  walk(tree)
+  walk(tree, add)
   return count
 }
 
+function invoke (fn) {
+  let args = Array.from(arguments)
+  return () => {
+    fn(...args.slice(1, args.length - 1))
+  }
+}
+
+const Component = props => {
+  return b('box', props)
+}
+
 tape('b should create a single node', t => {
-  let root = b('element')
-  t.ok(root.type === 'Element', 'b should capitalize types')
+  t.ok(b('element').type === 'Element', 'b should capitalize types')
+  t.end()
+})
+
+tape('Check type parameter type', t => {
+  t.ok(typeof b(Component).type === 'function', 'b should accept a function as type')
+  t.ok(typeof b('element').type === 'string', 'b should accept a string as type')
+  t.end()
+})
+
+tape('b should throw when no type if supplied or can not be infered', t => {
+  t.throws(invoke(b, {}), 'b should throw when the type is unspecified')
+  t.throws(invoke(b, 1), 'b should throw when the type can not be infered')
+  t.end()
+})
+
+tape('b should not require the use of an attribute object', t => {
+  let root = b('element', [
+    b('element')
+  ])
+  t.looseEquals(root.attr, {}, 'b generates an empty attribute object when not supplied')
+  t.equal(root.children.length, 1, 'b processes child array as 2nd param')
   t.end()
 })
 
 tape('b should create a tree of nodes', t => {
-  let tree = b('element', {}, [
+  let tree = b('element', [
     b('element')
   ])
   t.equal(count(tree), 2, 'b should recursively create the tree')
+  t.end()
+})
+
+tape('b should append a content string into the attribute list', t => {
+  t.equal(b('el', 'content').attr.content, 'content', 'content gets appended')
   t.end()
 })

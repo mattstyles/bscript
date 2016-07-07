@@ -1,26 +1,73 @@
 
-// const blessed = require('blessed')
+const {isArray} = require('util')
 
+/**
+ * Use generator to create the node
+ */
 class Node {
-  constructor (type, attr, children) {
-    this.type = type.replace(/^./, ch => ch.toUpperCase())
-    this.attr = attr || {}
-    this.children = children || []
+  constructor () {
+    this.type = null
+    this.attr = {}
+    this.children = []
     this.parent = null
   }
 }
 
-// function createBlessed (type, attr) {
-//   type = type.replace(/^./, ch => ch.toUpperCase())
-//   if (blessed[type]) {
-//     return blessed[type](attr)
-//   }
-//
-//   throw new Error('unrecognized type')
-// }
+/**
+ * Node generator, accepts multiple arguments
+ */
+function createNode (args) {
+  let node = new Node()
 
-module.exports = function b (type, attr, children) {
-  let node = new Node(type, attr, children)
+  // The order of checks is important
+  function generate (p) {
+    // Type
+    if (typeof p === 'string' && node.type === null) {
+      node.type = p.replace(/^./, ch => ch.toUpperCase())
+      return
+    }
+
+    // Type
+    if (typeof p === 'function') {
+      node.type = p
+      return
+    }
+
+    // Children
+    if (isArray(p)) {
+      node.children = p
+      return
+    }
+
+    // Attr
+    if (typeof p === 'object') {
+      node.attr = p
+      return
+    }
+
+    // Content
+    if (typeof p === 'string') {
+      node.attr.content = p
+      return
+    }
+  }
+
+  while (args.length) {
+    generate(args.shift())
+  }
+
+  if (!node.type) {
+    throw new Error('Can not generate node type')
+  }
+
+  return node
+}
+
+/**
+ * Main bscript function, returns nodes
+ */
+module.exports = function b () {
+  let node = createNode(Array.from(arguments))
   node.children.forEach(child => {
     child.parent = node
   })
