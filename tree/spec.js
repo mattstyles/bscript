@@ -1,7 +1,7 @@
 
 const tape = require('tape')
 const b = require('./')
-const {walk, walk2} = require('./util')
+const {walk, walk2, walkPost} = require('./util')
 
 function count (node) {
   let count = 0
@@ -23,7 +23,7 @@ function traversalOrder (fn, node) {
 /**
  * Creates a relation maps
  * '>' denotes immediate descendant
- * '.' denotes leaf node
+ * postfix '$' denotes leaf node
  */
 function relationMap (fn, node, subroot) {
   let str = ''
@@ -32,9 +32,28 @@ function relationMap (fn, node, subroot) {
       parent.type +
       '>' +
       child.type +
-      (child.children.length ? '' : '.') +
+      (child.children.length ? '' : '$') +
       '}'
   }, node, subroot)
+  return str
+}
+
+/**
+ * Checks in-element relations
+ * '>' denotes immediate descendant
+ * prefix '^' denotes parent relation
+ * postfix '$' denotes leaf node
+ */
+function relations (fn, root) {
+  let str = ''
+  fn(node => {
+    str += '{' +
+      (node.parent ? '^' + node.parent.type : '') +
+      '>' +
+      node.type +
+      (node.children.length ? '' : '$') +
+      '}'
+  }, root)
   return str
 }
 
@@ -117,6 +136,30 @@ tape('walk will depth-first walk the tree', t => {
   t.end()
 })
 
+tape('depth-first binary tree traversal', t => {
+  let tree = b('F', [
+    b('B', [
+      b('A'),
+      b('D', [
+        b('C'),
+        b('E')
+      ])
+    ]),
+    b('G', [
+      b('I', [
+        b('H')
+      ])
+    ])
+  ])
+  let preorder = 'FBADCEGIH'
+  let postorder = 'ACEDBHIGF'
+  t.equal(traversalOrder(walk, tree), preorder,
+    'depth-first pre-order is correct')
+  t.equal(traversalOrder(walkPost, tree), postorder,
+    'depth-first post-order is correct')
+  t.end()
+})
+
 tape('walk2 will depth-first walk the tree and remember parent nodes', t => {
   let tree = b('r', [
     b('1', [
@@ -127,8 +170,8 @@ tape('walk2 will depth-first walk the tree and remember parent nodes', t => {
       b('5')
     ])])
   t.equal(
-    relationMap(walk2, tree, {type: '$'}),
-    '{$>R}{R>1}{1>2.}{1>3.}{R>4}{4>5.}',
+    relationMap(walk2, tree, {type: '^'}),
+    '{^>R}{R>1}{1>2$}{1>3$}{R>4}{4>5$}',
     'walk2 is pre-order'
   )
   t.end()
@@ -148,5 +191,12 @@ tape('b should append children to their parents during creation', t => {
   t.equal(child.parent.type, root.type, '1 < r is ok')
   t.equal(child.children[0].type, grandchild.type, '1 > 2 is ok')
   t.equal(grandchild.parent.type, child.type, '2 < 1 is ok')
+
+  t.equal(
+    relations(walk, root),
+    '{>R}{^R>1}{^1>2$}',
+    'relations are correct'
+  )
+
   t.end()
 })
