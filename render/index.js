@@ -1,31 +1,40 @@
 
 const blessed = require('blessed')
-const {walk2} = require('../tree/util')
+const {walk} = require('../tree/util')
 
+/**
+ * Creates the raw blessed instance from attributes
+ */
 function createElement (type, attr) {
   if (blessed[type]) {
     return blessed[type](attr)
   }
 
-  console.log(type)
   throw new Error('unrecognized type')
 }
 
-function append (child, parent) {
-  if (typeof child.type === 'function') {
-    child.element = child.type(child.attr)
+/**
+ * Mutates the node by appending id and an actual element
+ */
+function create (node) {
+  const {type, parent, attr, children} = node
+
+  if (typeof type === 'function') {
+    let component = type(Object.assign(attr, {
+      children
+    }))
+    node.element = createElement(component.type, component.attr)
+  } else {
+    node.element = createElement(type, attr)
   }
-  child.element = createElement(child.type, child.attr)
-  if (!parent && !parent.element.append) {
+
+  if (!parent || !parent.element) {
     return
   }
 
-  if (parent.append) {
-    parent.append(child.element)
-    return
-  }
+  parent.element.append(node.element)
 
-  parent.element.append(child.element)
+  // Attach unique id
 }
 
 /**
@@ -35,7 +44,10 @@ function append (child, parent) {
  * For now just create a new tree of elements
  */
 module.exports = function render (root, screen) {
-  walk2(append, root, screen)
+  root._id = '$1'
+  walk(create, root)
+  screen.append(root.element)
   screen.render()
+  console.log(root)
   return root
 }

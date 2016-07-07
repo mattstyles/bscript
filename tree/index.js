@@ -6,6 +6,7 @@ const {isArray} = require('util')
  */
 class Node {
   constructor () {
+    this._id = null
     this.type = null
     this.element = null
     this.attr = {}
