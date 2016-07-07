@@ -42,6 +42,8 @@ function attachId (key) {
   }
 }
 
+let previous = null
+
 /**
  * Renders elements
  * Should cache last tree, checks diffs and render a patch based
@@ -50,11 +52,35 @@ function attachId (key) {
  */
 module.exports = function render (root, screen) {
   let createId = attachId()
-  walk(node => {
-    createId(node)
-    create(node)
-  }, root)
-  screen.append(root.element)
+  // Create new tree
+  if (!previous) {
+    walk(node => {
+      createId(node)
+      create(node)
+    }, root)
+    screen.append(root.element)
+    previous = root
+  } else {
+    // This is a fake walk of the tree, which we'd need to do to
+    // diff the old tree
+    walk(node => {
+      createId(node)
+      // create(node)
+    }, root)
+    // previous.element.setContent('count:' + count++)
+
+    // Update based on a manual diff from example/frame.js
+    previous.element.setContent(root.attr.content)
+  }
+
+  // Destroy old tree - does not work, still drops the frames
+  // walk(node => {
+  //   node.element.destroy()
+  // }, root)
+
+  // console.log(previous ? previous.attr.content : 'null', ':', root.attr.content)
+  // previous = root
+
   screen.render()
   return root
 }
