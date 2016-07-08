@@ -185,7 +185,7 @@ tape('walk2 will depth-first walk the tree and remember parent nodes', t => {
   t.end()
 })
 
-tape('b should append children to their parents during creation', t => {
+tape.skip('b should append children to their parents during creation', t => {
   // Simple example
   let linear = b('r', [b('1')])
   t.equal(linear.children[0].type, '1', 'r > 1 is ok')

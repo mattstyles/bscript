@@ -38,9 +38,9 @@ function createNode (args) {
     // Children
     if (isArray(p)) {
       node.children = p
-      p.forEach(child => {
-        child.parent = node
-      })
+      // p.forEach(child => {
+      //   child.parent = node
+      // })
       return
     }
 
@@ -82,8 +82,8 @@ module.exports = function b () {
   }
 
   // Attach parent nodes
-  node.children.forEach(child => {
-    child.parent = node
-  })
+  // node.children.forEach(child => {
+  //   child.parent = node
+  // })
   return node
 }

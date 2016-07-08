@@ -1,6 +1,6 @@
 
 const blessed = require('blessed')
-const {walk} = require('../tree/util')
+const {walk2} = require('../tree/util')
 
 /**
  * Creates the raw blessed instance from attributes
@@ -16,8 +16,8 @@ function createElement (type, attr) {
 /**
  * Mutates the node by appending id and an actual element
  */
-function create (node) {
-  const {type, parent, attr} = node
+function create (node, parent) {
+  const {type, attr} = node
   node.element = createElement(type, attr)
 
   if (!parent || !parent.element) {
@@ -35,8 +35,8 @@ function create (node) {
  */
 function attachId (key) {
   let count = 0
-  return node => {
-    let id = node.parent ? node.parent._id + '$' : key + '$' || '$'
+  return (node, parent) => {
+    let id = parent ? parent._id + '$' : key + '$' || '$'
     id += count++ + '.'
     node._id = id
   }
@@ -54,18 +54,18 @@ module.exports = function render (root, screen) {
   let createId = attachId()
   // Create new tree
   if (!previous) {
-    walk(node => {
-      createId(node)
-      create(node)
+    walk2((node, parent) => {
+      createId(node, parent)
+      create(node, parent)
     }, root)
     screen.append(root.element)
     previous = root
   } else {
     // This is a fake walk of the tree, which we'd need to do to
     // diff the old tree
-    walk(node => {
-      createId(node)
-      // create(node)
+    walk2((node, parent) => {
+      createId(node, parent)
+      create(node, parent)
     }, root)
     // previous.element.setContent('count:' + count++)
 
