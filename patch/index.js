@@ -2,7 +2,7 @@
 const blessed = require('blessed')
 const {walk2} = require('bscript-tree/util')
 
-const R_NODE_MEMBERS = /\/type$|\/attr$|\/children$/
+const R_NODE_MEMBERS = /\/type$|\/attr$|\/attr\/.+$|\/children$/
 const R_IGNORE = /\/element$/
 const R_MEMBER = /[^\/]*$/
 const R_NODE_PARENT = /\/children\/[0-9]+$/
@@ -60,6 +60,10 @@ function getNode (path, tree) {
   return path
     .split('/')
     .reduce((node, segment) => {
+      if (segment === '') {
+        return node
+      }
+
       return node[segment]
     }, tree)
 }
@@ -128,6 +132,20 @@ function createAdditionRecord (map, diff) {
 }
 
 /**
+ * Handle replace mutation
+ */
+function handleReplace (root, diff) {
+  let path = generatePath(diff.path)
+  let {attr, element} = getNode(path, root)
+  let member = extPath(diff.path)
+
+  if (member === 'content') {
+    element.setContent(diff.value)
+    attr[member] = diff.value
+  }
+}
+
+/**
  *
  */
 module.exports = function reconcile (diff, root, screen) {
@@ -141,6 +159,11 @@ module.exports = function reconcile (diff, root, screen) {
 
     if (d.op === 'add') {
       additions.set(...createAdditionRecord(additions, d))
+      return
+    }
+
+    if (d.op === 'replace') {
+      handleReplace(root, d)
       return
     }
   })
