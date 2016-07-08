@@ -1,6 +1,6 @@
 
 const blessed = require('blessed')
-const {walk} = require('bscript-tree/util')
+const {walk2} = require('bscript-tree/util')
 
 const R_NODE_MEMBERS = /\/type$|\/attr$|\/children$/
 const R_IGNORE = /\/element$/
@@ -86,10 +86,6 @@ function objectClone (a, b) {
   })
 }
 
-function traverseChildren (fn, node) {
-
-}
-
 /**
  *
  */
@@ -107,12 +103,8 @@ module.exports = function reconcile (diff, root, screen) {
       let obj = additions.get(path) || {}
       obj[extPath(d.path)] = d.value
       additions.set(path, obj)
-
-
     }
   })
-
-  screen.debug(additions)
 
   additions.forEach((node, path) => {
     let parent = getParentNode(path, root)
@@ -123,6 +115,11 @@ module.exports = function reconcile (diff, root, screen) {
 
     // Mutate the state tree to add the element
     create(stateNode, parent)
+
+    // Create all children of the new node
+    walk2((node, parent) => {
+      create(node, parent)
+    }, stateNode)
 
     if (!parent) {
       screen.append(stateNode.element)
