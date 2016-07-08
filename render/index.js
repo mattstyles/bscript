@@ -1,6 +1,6 @@
 
-const diff = require('../diff')
-const patch = require('../patch')
+const diff = require('bscript-diff')
+const patch = require('bscript-patch')
 
 /**
  * Creates a new id based from the parent
