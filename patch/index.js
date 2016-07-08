@@ -87,26 +87,12 @@ function objectClone (a, b) {
 }
 
 /**
- *
+ * Handle additions to the state tree.
+ * Mutatates root param.
  */
-module.exports = function reconcile (diff, root, screen) {
-  let additions = new Map()
-
-  // @TODO forEach perf, consider while
-  diff.forEach(d => {
-    if (R_IGNORE.test(d.path)) {
-      return
-    }
-
-    if (d.op === 'add') {
-      let path = generatePath(d.path)
-      let obj = additions.get(path) || {}
-      obj[extPath(d.path)] = d.value
-      additions.set(path, obj)
-    }
-  })
-
-  additions.forEach((node, path) => {
+function handleAdditions (root, screen) {
+  // Returns iterator to pass through Map.forEach (kv pair)
+  return (node, path) => {
     let parent = getParentNode(path, root)
     let stateNode = getNode(path, root)
 
@@ -124,5 +110,40 @@ module.exports = function reconcile (diff, root, screen) {
     if (!parent) {
       screen.append(stateNode.element)
     }
+  }
+}
+
+/**
+ * Creates a key-value addition record given a map of records and a
+ * diff object to use.
+ * Returns key-value tuple.
+ */
+function createAdditionRecord (map, diff) {
+  let path = generatePath(diff.path)
+  let obj = map.get(path) || {}
+
+  // Append diff to the addition record
+  obj[extPath(diff.path)] = diff.value
+  return [path, obj]
+}
+
+/**
+ *
+ */
+module.exports = function reconcile (diff, root, screen) {
+  let additions = new Map()
+
+  // @TODO forEach perf, consider while
+  diff.forEach(d => {
+    if (R_IGNORE.test(d.path)) {
+      return
+    }
+
+    if (d.op === 'add') {
+      additions.set(...createAdditionRecord(additions, d))
+      return
+    }
   })
+
+  additions.forEach(handleAdditions(root, screen))
 }
