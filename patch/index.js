@@ -1,5 +1,6 @@
 
 const blessed = require('blessed')
+const exists = require('exists')
 const {walk2} = require('bscript-tree/util')
 
 const R_NODE_MEMBERS = /\/type$|\/attr$|\/attr\/.+$|\/children$/
@@ -142,6 +143,16 @@ function handleReplace (root, diff) {
   if (member === 'content') {
     element.setContent(diff.value)
     attr[member] = diff.value
+    return
+  }
+
+  // Attempt to update element attr
+  if (exists(attr[member])) {
+    attr[member] = diff.value
+  }
+
+  if (exists(element[member])) {
+    element[member] = diff.value
   }
 }
 

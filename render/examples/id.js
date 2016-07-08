@@ -60,5 +60,5 @@ let App = props => {
 let tree = render(b(App), screen)
 
 walk(node => {
-  console.log(node.attr.content, ':', node._id)
+  console.log(node.attr.content)
 }, tree)
