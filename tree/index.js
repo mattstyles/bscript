@@ -6,12 +6,10 @@ const {isArray} = require('util')
  */
 class Node {
   constructor () {
-    this._id = null
     this.type = null
     this.element = null
     this.attr = {}
     this.children = []
-    this.parent = null
   }
 }
 
@@ -38,9 +36,6 @@ function createNode (args) {
     // Children
     if (isArray(p)) {
       node.children = p
-      // p.forEach(child => {
-      //   child.parent = node
-      // })
       return
     }
 
@@ -81,9 +76,5 @@ module.exports = function b () {
     }))
   }
 
-  // Attach parent nodes
-  // node.children.forEach(child => {
-  //   child.parent = node
-  // })
   return node
 }

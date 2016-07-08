@@ -1,7 +1,7 @@
 {
-  "name": "bscript-render",
+  "name": "bscript-patch",
   "version": "0.0.0",
-  "description": "Renders blessed elements from a bscript tree",
+  "description": "Reconciles state trees using blessed elements",
   "main": "index.js",
   "scripts": {
     "test": "standard *.js && tape spec.js"
@@ -12,7 +12,10 @@
   },
   "keywords": [
     "blessed",
-    "render",
+    "reconcile",
+    "reconciler",
+    "patch",
+    "apply",
     "bscript"
   ],
   "author": "Matt Styles <matt@veryfizzyjelly.com> (http://github.com/mattstyles)",
@@ -26,6 +29,6 @@
     "tape": "^4.6.0"
   },
   "peerDependencies": {
-    "blessed": "^0.1.81"
+    "blessed": "0.1.81"
   }
 }

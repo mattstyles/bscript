@@ -27,5 +27,6 @@
     "tape": "^4.6.0"
   },
   "dependencies": {
+    "fast-json-patch": "1.0.0"
   }
 }

@@ -13,4 +13,6 @@ screen.on('keypress', (ch, key) => {
   }
 })
 
+screen.debug('   starting...')
+
 module.exports = screen
