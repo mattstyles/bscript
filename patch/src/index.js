@@ -9,8 +9,6 @@ const R = require('./regex')
 module.exports = function reconcile (diff, root, screen) {
   let additions = new Map()
 
-  screen.debug(diff)
-
   // @TODO forEach perf, consider while
   diff.forEach(d => {
     if (R.IGNORE.test(d.path)) {

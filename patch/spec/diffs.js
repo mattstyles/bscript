@@ -2,6 +2,12 @@
 const diff = require('bscript-diff')
 const b = require('bscript-tree')
 
+function newRoot () {
+  let x = {}
+  let y = b('box', 'hello')
+  return diff(x, y)
+}
+
 function root () {
   let x = b('box', 'hello')
   let y = b('box', 'world')
@@ -34,8 +40,23 @@ function deep3 () {
   return diff(x, y)[0]
 }
 
+function addRoot () {
+  let x = b('a')
+  let y = b('a', [b('b'), b('c')])
+  return diff(x, y)
+}
+
+function addDeep2 () {
+  let x = b('a', [b('b')])
+  let y = b('a', [b('b', [b('c')])])
+  return diff(x, y)
+}
+
 module.exports = {
+  newRoot,
   root,
   deep2,
-  deep3
+  deep3,
+  addRoot,
+  addDeep2
 }

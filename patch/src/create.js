@@ -9,7 +9,7 @@ function createElement (type, attr) {
     return blessed[type](attr)
   }
 
-  throw new Error('unrecognized type')
+  throw new Error('unrecognized type: ' + type)
 }
 
 /**

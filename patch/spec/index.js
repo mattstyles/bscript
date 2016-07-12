@@ -3,6 +3,7 @@ const tape = require('tape')
 const b = require('bscript-tree')
 const diffs = require('./diffs')
 const util = require('../src/util')
+const add = require('../src/add')
 
 tape('generatePath converts member path into node path', t => {
   let p = util.generatePath(diffs.root().path)
@@ -80,6 +81,50 @@ tape('getParentNode should grab the parent of a specified node', t => {
   t.equal(p2.attr.content, 'root', 'Setup for reference test')
   tree.attr.content = 'test'
   t.equal(p2.attr.content, 'test', 'Parent nodes are grabbed by reference')
+
+  t.end()
+})
+
+tape('creates an addition record', t => {
+  let map = new Map()
+  let diff = diffs.addRoot()
+  let record = add.createAdditionRecord(map, diff[0])
+  let newNode = record[1]
+
+  let record2 = add.createAdditionRecord(map, diff[1])
+  let newNode2 = record2[1]
+
+  t.equal(record[0], '/children/0', 'an addition record has a path')
+  t.equal(typeof newNode, 'object', 'an addition record contains a new node')
+  t.ok(newNode['0'], 'an addition record knows where to add an element')
+  t.ok(newNode2['1'], 'an addition record knows where children are')
+
+  t.end()
+})
+
+tape('addition records understand tree depth', t => {
+  let map = new Map()
+  let diff = diffs.addDeep2()
+  let record = add.createAdditionRecord(map, diff[0])
+  let newNode = record[1]
+
+  t.equal(record[0], '/children/0/children/0', 'an addition record has a path')
+  t.equal(typeof newNode, 'object', 'an addition record contains a new node')
+  t.ok(newNode['0'], 'an addition record knows where to add an element')
+
+  t.end()
+})
+
+tape('addition records ', t => {
+  let map = new Map()
+  let diff = diffs.newRoot()
+  let records = []
+
+  diff.forEach(d => records.push(add.createAdditionRecord(map, d)))
+
+  t.equal(records[0][0], '_', 'addition records understand root')
+  t.equal(records[0][1].type, 'Box', 'addition records register a single atomic change')
+  t.equal(records[1][1].element, null, 'addition records register a single atomic change')
 
   t.end()
 })
