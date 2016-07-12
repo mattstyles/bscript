@@ -2,9 +2,9 @@
   "name": "bscript-patch",
   "version": "0.0.0",
   "description": "Reconciles state trees using blessed elements",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "standard *.js && tape spec.js"
+    "test": "standard *.js && tape spec/index.js"
   },
   "repository": {
     "type": "git",
