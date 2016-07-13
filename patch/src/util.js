@@ -33,6 +33,10 @@ function memberPath (path) {
   return path.match(R.NODE_MEMBERS)[0]
 }
 
+function isAttribute (path) {
+  return R.NODE_MEMBERS.test(path)
+}
+
 /**
  * Walks the tree and returns the requested node
  */
@@ -83,5 +87,6 @@ module.exports = {
   parentPath,
   getNode,
   getParentNode,
+  isAttribute,
   objectClone
 }

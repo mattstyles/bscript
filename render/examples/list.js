@@ -25,6 +25,13 @@ const App = props => {
 
 let count = 0
 let state = ['foo', 'bar']
+
+// This tests removing items
+// Also pop during the main loop
+// for (let i = 0; i < 100; i++) {
+//   state.push(i + '')
+// }
+
 const FPS = 1000 / 60
 
 var prev = process.hrtime()
@@ -47,6 +54,7 @@ function main (state) {
 
     count++
     state.push(count + '')
+    // state.pop()
     main(state)
   }, FPS)
 }

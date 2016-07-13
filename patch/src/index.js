@@ -30,7 +30,6 @@ module.exports = function reconcile (diff, root, screen) {
     }
 
     if (d.op === 'remove') {
-      screen.debug(d)
       handleRemove(root, d)
       return
     }
