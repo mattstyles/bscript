@@ -1,6 +1,6 @@
 {
   "name": "bscript-render",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Renders blessed elements from a bscript tree",
   "main": "index.js",
   "scripts": {
