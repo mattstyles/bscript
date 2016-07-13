@@ -1,6 +1,6 @@
 {
   "name": "bscript-render",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Renders blessed elements from a bscript tree",
   "main": "index.js",
   "scripts": {
@@ -26,9 +26,11 @@
     "standard": "^7.1.2",
     "tape": "^4.6.0"
   },
-  "peerDependencies": {
-    "blessed": "^0.1.81",
+  "dependencies": {
     "bscript-diff": "0.1.0",
     "bscript-patch": "0.1.0"
+  },
+  "peerDependencies": {
+    "blessed": "^0.1.81"
   }
 }
