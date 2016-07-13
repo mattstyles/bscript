@@ -1,24 +1,36 @@
 
 const render = require('../')
 const b = require('../../tree')
-const screen = require('./screen')
+const screen = require('./util/screen')
 
-var tree = b('box', 'Hello', [
+// render(b('box', 'Hello', [
+//   b('box', {
+//     top: 1,
+//     content: 'deep'
+//   })
+// ]), screen)
+//
+// setTimeout(() => {
+//   render(b('box', 'Hello', [
+//     b('box', {
+//       top: 1
+//     })
+//   ]), screen)
+// }, 250)
+
+render(b('box', 'Hello', [
   b('box', {
     top: 1,
-    content: 'deep'
+    content: 'World'
   })
-])
-
-let res = render(tree, screen)
+]), screen)
 
 setTimeout(() => {
   render(b('box', 'Hello', [
     b('box', {
-      top: 1
+      content: 'World'
     })
   ]), screen)
-  // screen.render()
 }, 250)
 
 // render(b('box', 'Hello', [

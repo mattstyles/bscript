@@ -2,7 +2,7 @@
 const render = require('../')
 const b = require('../../tree')
 const {walk} = require('../../tree/util')
-const screen = require('./screen')
+const screen = require('./util/screen')
 
 let App = props => {
   return b('text', {

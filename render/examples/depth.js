@@ -1,7 +1,7 @@
 
 const render = require('../')
 const b = require('../../tree')
-const screen = require('./screen')
+const screen = require('./util/screen')
 
 function renderChildren (items) {
   let count = 0
