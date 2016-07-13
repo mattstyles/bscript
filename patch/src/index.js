@@ -15,8 +15,11 @@ module.exports = function reconcile (diff, root, screen) {
       return
     }
 
+    screen.debug('diff:', d)
+
     if (d.op === 'add') {
       additions.set(...createAdditionRecord(additions, d))
+      screen.debug(additions)
       return
     }
 
@@ -24,8 +27,7 @@ module.exports = function reconcile (diff, root, screen) {
       // @TODO would it be better to handle replaces similarly to
       // additions by grouping all changes? Then just stamp over
       // all attr changes
-      let m = handleReplace(root, d)
-      // screen.debug(m, ':', diff)
+      handleReplace(root, d, screen)
       return
     }
   })

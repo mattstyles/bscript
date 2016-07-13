@@ -27,13 +27,17 @@ let count = 0
 let state = ['foo', 'bar']
 const FPS = 1000 / 60
 
+var prev = process.hrtime()
+
 function main (state) {
-  let start = process.hrtime()
+  let now = process.hrtime(prev)
+  screen.debug('frame render time', prettyTime(now), now[1] > 32666666 ? 'OVER ' + count : '')
+
   render(b(App, {
     items: state
   }), screen)
-  let time = process.hrtime(start)
-  screen.debug('frame render time', prettyTime(time), time[1] > 16666666 ? 'OVER ' + count : '')
+
+  prev = process.hrtime()
 
   setTimeout(() => {
     if (count > 100) {

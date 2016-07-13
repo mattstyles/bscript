@@ -14,7 +14,7 @@ function generatePath (path) {
  * needs to be manipulated
  */
 function extPath (path) {
-  return path.match(R.MEMBER)[0]
+  return path.match(R.CHANGE)[0]
 }
 
 /**
@@ -24,6 +24,13 @@ function parentPath (path) {
   return generatePath(path)
     .replace(R.NODE_PARENT, '')
     .replace(/\/$/, '')
+}
+
+/**
+ * Grabs the node member from the path
+ */
+function memberPath (path) {
+  return path.match(R.NODE_MEMBERS)[0]
 }
 
 /**
@@ -72,6 +79,7 @@ function objectClone (a, b) {
 module.exports = {
   extPath,
   generatePath,
+  memberPath,
   parentPath,
   getNode,
   getParentNode,

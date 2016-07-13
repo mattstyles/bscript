@@ -115,7 +115,7 @@ tape('addition records understand tree depth', t => {
   t.end()
 })
 
-tape('addition records ', t => {
+tape('addition records', t => {
   let map = new Map()
   let diff = diffs.newRoot()
   let records = []
@@ -125,6 +125,19 @@ tape('addition records ', t => {
   t.equal(records[0][0], '_', 'addition records understand root')
   t.equal(records[0][1].type, 'Box', 'addition records register a single atomic change')
   t.equal(records[1][1].element, null, 'addition records register a single atomic change')
+
+  t.end()
+})
+
+tape('addition records for adding attributes', t => {
+  let map = new Map()
+  let diff = diffs.addAttrRoot()
+  let records = []
+
+  diff.forEach(d => records.push(add.createAdditionRecord(map, d)))
+
+  t.equal(records[0][0], '_', 'additions understand root')
+  t.ok(records[0][1].attr, 'addition records append an attr to copy')
 
   t.end()
 })
