@@ -48,10 +48,8 @@ function renderRoot (root, node) {
 function handleAdditions (root, screen) {
   // Returns iterator to pass through Map.forEach (kv pair)
   return (node, path) => {
-    screen.debug('addtion:', node, path)
     // Check for initial render
     if (path === '_' && !root.element) {
-      screen.debug('root')
       renderRoot(root, node)
       screen.append(root.element)
       return
@@ -60,8 +58,7 @@ function handleAdditions (root, screen) {
     let parent = getParentNode(path, root)
     let stateNode = getNode(path, root)
 
-    // screen.debug(stateNode.type, node, path)
-
+    // Check for an attribute addition in an existing element
     if (stateNode) {
       let key = node[0]
 

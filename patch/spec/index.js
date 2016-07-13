@@ -128,16 +128,3 @@ tape('addition records', t => {
 
   t.end()
 })
-
-tape('addition records for adding attributes', t => {
-  let map = new Map()
-  let diff = diffs.addAttrRoot()
-  let records = []
-
-  diff.forEach(d => records.push(add.createAdditionRecord(map, d)))
-
-  t.equal(records[0][0], '_', 'additions understand root')
-  t.ok(records[0][1].attr, 'addition records append an attr to copy')
-
-  t.end()
-})

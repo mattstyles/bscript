@@ -15,8 +15,6 @@ module.exports = function reconcile (diff, root, screen) {
       return
     }
 
-    screen.debug('diff:', d)
-
     if (d.op === 'add') {
       additions.set(...createAdditionRecord(additions, d))
       screen.debug(additions)
