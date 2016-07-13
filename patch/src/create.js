@@ -19,6 +19,12 @@ function create (node, parent) {
   const {type, attr} = node
   node.element = createElement(type, Object.assign({}, attr))
 
+  if (node.children) {
+    node.children.forEach(child => {
+      create(child, node)
+    })
+  }
+
   if (!parent) {
     // parent.append(node.element)
     return

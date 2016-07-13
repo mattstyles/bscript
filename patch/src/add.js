@@ -33,11 +33,6 @@ function renderRoot (root, node) {
   // Create the blessed element for the bscript node
   create(root, null)
 
-  // Create children
-  root.children.forEach(child => {
-    create(child, root)
-  })
-
   return root
 }
 
@@ -80,11 +75,6 @@ function handleAdditions (root, screen) {
     Object.keys(node).forEach(key => {
       let n = node[key]
       create(n, parent)
-
-      // Create all children of the new node
-      n.children.forEach(child => {
-        create(child, n)
-      })
     })
   }
 }

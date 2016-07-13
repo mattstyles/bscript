@@ -26,13 +26,11 @@ function replace (node, diff) {
 /**
  * Handle replace mutation
  */
-function handleReplace (root, diff, screen) {
+function handleReplace (root, diff) {
   let path = generatePath(diff.path)
   let node = getNode(path, root)
   let member = extPath(diff.path)
   let {attr, element} = node
-
-  screen.debug(path, member)
 
   if (member === 'content') {
     element.setContent(diff.value)

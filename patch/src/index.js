@@ -1,6 +1,7 @@
 
 const {handleReplace} = require('./replace')
 const {createAdditionRecord, handleAdditions} = require('./add')
+const {handleRemove} = require('./remove')
 const R = require('./regex')
 
 /**
@@ -17,7 +18,6 @@ module.exports = function reconcile (diff, root, screen) {
 
     if (d.op === 'add') {
       additions.set(...createAdditionRecord(additions, d))
-      screen.debug(additions)
       return
     }
 
@@ -25,7 +25,13 @@ module.exports = function reconcile (diff, root, screen) {
       // @TODO would it be better to handle replaces similarly to
       // additions by grouping all changes? Then just stamp over
       // all attr changes
-      handleReplace(root, d, screen)
+      handleReplace(root, d)
+      return
+    }
+
+    if (d.op === 'remove') {
+      screen.debug(d)
+      handleRemove(root, d)
       return
     }
   })
