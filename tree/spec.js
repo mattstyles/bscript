@@ -209,7 +209,7 @@ tape.skip('b should append children to their parents during creation', t => {
   t.end()
 })
 
-tape('b should accept component functions', t => {
+tape.only('b should accept component functions', t => {
   let root = b(Component)
   t.equal(root.type, 'Box', 'Component functions should be invoked')
   let complexRoot = b(Component, [b('1')])
@@ -227,5 +227,22 @@ tape('b should accept component functions', t => {
   let compChildrenPass = b(ComplexComponent, [b('r1')])
   t.equal(compChildrenPass.type, 'C1', 'Components with children and passed children invoke')
   t.equal(compChildrenPass.children.length, 2, 'Components can have their own children and be passed children')
+
+  let attrComp = b(Component, {foo: 'bar'})
+  t.equal(attrComp.type, 'Box', 'Components with attributes passed invoke')
+  t.equal(attrComp.attr.foo, 'bar', 'Attributes are passed to components')
+  let attrChild = b(ChildComponent, {foo: 'bar'}, [
+    b(Component, {
+      baz: 'quux'
+    })
+  ])
+  t.equal(attrChild.type, 'Box', 'Complex components with children and attributes invoke')
+  t.equal(attrChild.attr.foo, 'bar', 'Complex components get their attributes')
+  t.equal(attrChild.children[0].type, 'Box', 'Complex children of complex components invoke')
+  t.equal(attrChild.children[0].attr.baz, 'quux', 'Complex children also get their attributes')
+
+  let childAttrComp = b('element', [b(Component, {foo: 'bar'})])
+  t.equal(childAttrComp.children.length, 1, 'Elements can get components as children')
+  t.equal(childAttrComp.children[0].attr.foo, 'bar', 'Child components can get attributes')
   t.end()
 })
